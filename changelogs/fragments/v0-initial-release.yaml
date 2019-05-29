@@ -1,0 +1,10 @@
+---
+major_changes:
+  - Initial release of the ``datacom_dmos`` Ansible role.
+  - This role provides functions to perform automation activities on Datacom DmOS devices.
+
+new_functions:
+  - NEW ``get_facts`` function can be used to collect facts from Datacom DmOS devices.
+  - NEW ``config_manager/get`` function returns the either the current active or current saved configuration from Datacom DmOS devices.
+  - NEW ``config_manager/load`` function provides a means to load a configuration file onto a target device running Datacom DmOS.
+  - NEW ``config_manager/save`` function saves the current active (running) configuration to the startup configuration.

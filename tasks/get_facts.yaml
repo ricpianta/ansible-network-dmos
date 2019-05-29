@@ -1,0 +1,19 @@
+---
+- name: validate required connection is configured
+  fail:
+    msg: "expected connection value to be set to network_cli, got {{ ansible_connection }}"
+  when: ansible_connection != 'network_cli'
+
+- name: collect platform capabilities as facts
+  dmos_capabilities:
+
+- name: run command and parse output
+  include_tasks: run_cli.yaml
+  vars:
+    dmos_command: "{{ item.command }}"
+    dmos_parser: "cli/{{ item.parser }}"
+    dmos_parser_engine: "{{ item.engine | default('command_parser') }}"
+    dmos_run_cli_command_pre_hook: "{{ item.pre_hook | default(None) }}"
+    dmos_run_cli_command_post_hook: "{{ item.post_hook | default(None) }}"
+  loop: "{{ lookup('file', dmos_get_facts_command_map) | from_yaml }}"
+  when: dmos_get_facts_subset |  intersect(item.groups)

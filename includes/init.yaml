@@ -1,0 +1,42 @@
+---
+- name: set the role version
+  set_fact:
+    ansible_network_dmos_path: "{{ role_path }}"
+    ansible_network_dmos_version: "devel"
+
+- name: display the role version to stdout
+  debug:
+    msg: "ansible_network.datacom_dmos version {{ ansible_network_dmos_version }}"
+
+- name: validate ansible_network_os == 'dmos'
+  fail:
+    msg: "expected ansible_network_os to be `dmos`, got `{{ ansible_network_os }}`"
+  when: ansible_network_os != 'dmos'
+
+- name: validate ansible_connection == 'network_cli'
+  fail:
+    msg: "expected ansible_network to be `network_cli`, got `{{ ansible_connection }}`"
+  when: ansible_connection != 'network_cli'
+
+- name: set ansible_provider_functions fact
+  set_fact:
+    ansible_network_provider_functions:
+      - get_facts
+      - configure_user
+      - configure_vlan
+      - configure_system_properties
+      - configure_lldp
+
+- name: read ansible_min_version from meta data
+  include_vars:
+    file: ../meta/main.yml
+    name: ansible_galaxy_meta
+
+- name: display minimun Network Engine version
+  debug:
+    msg: "This role requires Ansible Network Engine {{ ansible_galaxy_meta.galaxy_info.min_ansible_network_engine_version }} or higher."
+
+- name: validate minimum Ansible version
+  fail:
+    msg: "This role requires Ansible {{ ansible_galaxy_meta.galaxy_info.min_ansible_version }} or higher. You are currently running Ansible {{ ansible_version.full }}."
+  when: 'ansible_version.full is version_compare(ansible_galaxy_meta.galaxy_info.min_ansible_version, "<")'

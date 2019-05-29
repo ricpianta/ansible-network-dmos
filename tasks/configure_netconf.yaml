@@ -1,0 +1,11 @@
+---
+- name: validate required connection is configured
+  fail:
+    msg: "expected connection value to be set to network_cli, got {{ ansible_connection }}"
+  when: ansible_connection != 'network_cli'
+
+- name: "dmos: enable netconf if not already enabled"
+  dmos_netconf:
+    netconf_port: "{{ dmos_netconf_port }}"
+    netconf_vrf: "{{ dmos_netconf_vrf }}"
+    state: present

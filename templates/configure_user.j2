@@ -1,0 +1,19 @@
+{% for user in users %}
+
+{% if user.state is defined and user.state == 'absent' %}
+no aaa username {{ user.name }}
+
+{% else %}
+
+{% if user.password is not defined %}
+aaa user {{ user.name }}
+{% elif user.password %}
+aaa user {{ user.name }} password {{ user.password }}
+{% endif %}
+
+{% if user.group is defined %}
+group {{ user.group }}
+{% endif %}
+
+{% endif %}
+{% endfor %}

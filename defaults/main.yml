@@ -1,0 +1,13 @@
+---
+# defaults file for ansible-network.datacom_dmos
+#
+dmos_get_facts_command_map: "{{ role_path }}/vars/get_facts_command_map.yaml"
+dmos_get_facts_subset: "{{ subset | default(['default']) }}"
+
+dmos_netconf_port: "{{ netconf_port | default(830) }}"
+dmos_netconf_vrf: "{{ netconf_vrf | default('default') }}"
+
+dmos_rollback_enabled: "{{ rollback_enabled | default(True) }}"
+dmos_config_file: "{{ config_file | default(None) }}"
+dmos_config_text: "{{ config_text | default(None) }}"
+dmos_config_replace: "{{ replace | default(False) }}"
